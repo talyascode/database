@@ -1,25 +1,26 @@
 """
 Author: Talya Gross
-database project
-
+database class
 """
+# import
 import logging
 
 
 class DataBase:
     def __init__(self):
         """
-        the constructor function
+        build function of the database class
         """
         self.data_dict = {}
 
     def set_value(self, key, val):
         """
         setting the value of key to val
+        if key doesnt exist-> creates new key and val, if key exists-> the value will be changed to val
         :param key: the key of the dictionary
         :param val: the value of the key
+        :return  true or false for success or failure
         """
-        # if key doesnt exist-> creates new key and val, if key exists-> the value will be changed to val
         logging.debug("setting" + key + "to value:" + val)
         self.data_dict.update({key: val})
         return True
@@ -27,7 +28,7 @@ class DataBase:
     def get_value(self, key):
         """
         :param key: the key of the dictionary
-        :return: the value of the key
+        :return: the value of the key/ None - if the key doesnt exist
         """
         logging.debug("return" + key)
         if key in self.data_dict.keys():
@@ -38,11 +39,7 @@ class DataBase:
         """
         deletes the key from the dictionary
         :param key: the key of the dictionary
-        :return: the updated dictionary without the key
+        :return: the deleted value / None if the key doesnt exists
         """
         logging.debug("return dict after deleting:" + key)
         return self.data_dict.pop(key, None)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(filename="database.log", filemode="a")
