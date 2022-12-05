@@ -2,6 +2,7 @@
 Author: Talya Gross
 database class
 """
+
 # import
 import logging
 
