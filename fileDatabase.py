@@ -1,29 +1,31 @@
 """
 Author: Talya Gross
-database project
+file database class
 """
+# import
 import database
 import pickle
 import logging
-import os
 
 FILE = "database"
 
 
 class FileDatabase(database.DataBase):
     def __init__(self):
+        """
+            build function of the FileDatabase class
+        """
         super().__init__()
-        #if not os.path.isfile(FILE):
         with open(FILE, "wb") as file:
             logging.debug("read file")
             pickle.dump(self.data_dict, file)
 
     def set_value(self, key, val):
         """
-        setting the key value to val
+        reading the data, setting the key to val in the file and database object.
         :param key: the key of the dictionary
         :param val: the value of the key
-        :return:
+        :return: true or false for success or failure
         """
         flag = True
         try:
@@ -39,12 +41,13 @@ class FileDatabase(database.DataBase):
             print('received pickle exception - ' + str(err))
             flag = False
         finally:
-            # self.data_dict.close()
             return flag
 
     def get_value(self, key):
         """
-        :return: the dictionary after reading it to update
+        reading the dictionary file
+        :param key: the key of the dictionary
+        :return: the value for the key
         """
         with open(FILE, "rb") as file:
             logging.debug("opened file")
@@ -53,26 +56,26 @@ class FileDatabase(database.DataBase):
 
     def delete_value(self, key):
         """
-        deleting the key in the dictionary, and updating it without the deleted key
+        reading the file, deleting the value in the database object and file
+        and updating it without the deleted key in the file
         :param key: the key of the dictionary
-        :return: the updated dictionary without the key
+        :return: the deleted value / None if the key doesnt exists
         """
         with open(FILE, "rb") as file:
             logging.debug("opened file")
             self.data_dict = pickle.load(file)
         val = super().delete_value(key)
-        logging.debug("deleted key and value")
+        logging.debug("deleted value")
         with open(FILE, "wb") as file:
             logging.debug("read file")
             pickle.dump(self.data_dict, file)
         return val
 
     def print_all(self):
+        """
+        printing the dictionary
+        """
         with open(FILE, "rb") as file:
             logging.debug("opened file")
             self.data_dict = pickle.load(file)
         print(self.data_dict)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(filename="fileDB.log", filemode="a")
