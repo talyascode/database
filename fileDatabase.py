@@ -13,10 +13,10 @@ FILE = "database"
 class FileDatabase(database.DataBase):
     def __init__(self):
         super().__init__()
-        if not os.path.isfile(FILE):
-            with open(FILE, "wb") as file:
-                logging.debug("read file")
-                pickle.dump(self.data_dict, file)
+        #if not os.path.isfile(FILE):
+        with open(FILE, "wb") as file:
+            logging.debug("read file")
+            pickle.dump(self.data_dict, file)
 
     def set_value(self, key, val):
         """
@@ -66,6 +66,12 @@ class FileDatabase(database.DataBase):
             logging.debug("read file")
             pickle.dump(self.data_dict, file)
         return val
+
+    def print_all(self):
+        with open(FILE, "rb") as file:
+            logging.debug("opened file")
+            self.data_dict = pickle.load(file)
+        print(self.data_dict)
 
 
 if __name__ == '__main__':

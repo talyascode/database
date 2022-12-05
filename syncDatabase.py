@@ -35,10 +35,10 @@ class SyncDatabase:
         return data
 
     def delete_value(self, key):
-        self.write.acquire()  # waiting until available
+        self.get_acquires()   # waiting until available
         logging.debug("deleted key and value")
         data = self.data.delete_value(key)
-        self.write.release()
+        self.get_releases()
         return data
 
     def set_value(self, key, val):
@@ -54,11 +54,15 @@ class SyncDatabase:
         for i in range(10):
             self.read.acquire()
 
-
     def get_releases(self):
         for i in range(10):
             self.read.release()
         self.write.release()
+
+    def print_all(self):
+        self.read.acquire()
+        self.data.print_all()
+        self.read.release()
 
 
 if __name__ == '__main__':
