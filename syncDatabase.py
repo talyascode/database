@@ -1,22 +1,22 @@
-# db object create
-# sync_database = sync(db, true) / true for threading or multi
+"""
+Author: Talya Gross
+file database class
+"""
 
-
-# lock- only one can get, for writing
-# semaphore- only 10 can get, for reading
-
-# state processing / state threading
+# import
 import threading
 import multiprocessing
 from fileDatabase import *
 
 
-# process = multiprocessing(target=get_value)
-# process.start()
-
-
 class SyncDatabase:
     def __init__(self, mode):
+        """
+            build function of the SyncDatabase class
+        """
+        # lock- only one can get, for writing
+        # semaphore- only 10 can get, for reading
+
         # mode - True for processing, False for threading
         if mode:  # multi
             self.read = multiprocessing.Semaphore(10)
@@ -27,6 +27,11 @@ class SyncDatabase:
         self.data = FileDatabase()
 
     def get_value(self, key):
+        """
+        acquiring the read semaphore, getting the value of the key and releasing the semaphore
+        :param key: the key of the dictionary
+        :return: the value for the key
+        """
         # print(self.data.get_value("color"))
         self.read.acquire()  # waiting until available
         logging.debug("reading key")
@@ -35,6 +40,12 @@ class SyncDatabase:
         return data
 
     def delete_value(self, key):
+        """
+        acquiring all the 10 semaphores for reading and the lock for writing
+        and then deleting the key from the dictionary. releasing all the semaphores and the lock
+        :param key: the key of the dictionary
+        :return: the deleted value / None if the key doesnt exists
+        """
         self.get_acquires()   # waiting until available
         logging.debug("deleted key and value")
         data = self.data.delete_value(key)
@@ -42,28 +53,40 @@ class SyncDatabase:
         return data
 
     def set_value(self, key, val):
+        """
+        acquiring all the 10 semaphores for reading and the lock for writing
+        setting the key to val and releasing all the semaphores and the lock.
+        :param key: the key of the dictionary
+        :param val: the value of the key
+        :return  true or false for success or failure
+        """
         flag = True
-        self.get_acquires()  # getting all the 10 semaphores for reading so no one will read while writing
+        self.get_acquires()
         logging.info(flag)
         flag = self.data.set_value(key, val)
         self.get_releases()
         return flag  # true or false
 
     def get_acquires(self):
+        """
+        acquiring all the 10 semaphores for reading and the lock for writing
+        """
         self.write.acquire()
         for i in range(10):
             self.read.acquire()
 
     def get_releases(self):
+        """
+        releasing all the semaphores and the lock
+        """
+        self.write.release()
         for i in range(10):
             self.read.release()
-        self.write.release()
 
     def print_all(self):
+        """
+        acquiring the semaphore for reading and printing the dictionary
+        """
         self.read.acquire()
         self.data.print_all()
         self.read.release()
-
-
-if __name__ == '__main__':
-    logging.basicConfig(filename="syncDatabase.log", filemode="a")
