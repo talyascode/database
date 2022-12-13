@@ -93,6 +93,7 @@ class SyncDatabase:
 
 
 if __name__ == '__main__':
+
     db = SyncDatabase(True)
     assert db.set_value('2', '4') == True
     assert db.get_value('2') == '4'
