@@ -82,6 +82,7 @@ class FileDatabase(database.DataBase):
 
 
 if __name__ == '__main__':
+
     db = FileDatabase()
     assert db.set_value('2', '4') == True
     assert db.get_value('2') == '4'
