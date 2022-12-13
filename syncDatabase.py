@@ -90,3 +90,11 @@ class SyncDatabase:
         self.read.acquire()
         self.data.print_all()
         self.read.release()
+
+
+if __name__ == '__main__':
+    db = SyncDatabase(True)
+    assert db.set_value('2', '4') == True
+    assert db.get_value('2') == '4'
+    assert db.delete_value('2') == '4'
+

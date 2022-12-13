@@ -79,3 +79,11 @@ class FileDatabase(database.DataBase):
             logging.debug("opened file")
             self.data_dict = pickle.load(file)
         print(self.data_dict)
+
+
+if __name__ == '__main__':
+    db = FileDatabase()
+    assert db.set_value('2', '4') == True
+    assert db.get_value('2') == '4'
+    assert db.delete_value('2') == '4'
+

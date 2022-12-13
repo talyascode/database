@@ -44,3 +44,12 @@ class DataBase:
         """
         logging.debug("return dict after deleting:" + key)
         return self.data_dict.pop(key, None)
+
+
+if __name__ == '__main__':
+    db = DataBase()
+    assert db.set_value('2', '4') == True
+    assert db.get_value('2') == '4'
+    assert db.delete_value('2') == '4'
+
+
