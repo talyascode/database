@@ -17,7 +17,7 @@ class FileDatabase(database.DataBase):
         """
         super().__init__()
         with open(FILE, "wb") as file:
-            logging.debug("read file")
+            logging.debug("write file")
             pickle.dump(self.data_dict, file)
 
     def set_value(self, key, val):
